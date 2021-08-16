@@ -117,7 +117,8 @@ view model =
         [ a [ id "top" ] []
         , viewHeader
         , pageFunction model.status
-        , footer [] [ p [] [ link "#top" "Jump to top" ] ]
+        , footer []
+            [ p [] [ a [ href "#top", target "_self" ] [ text "Jump to top" ] ] ]
         ]
     }
 
