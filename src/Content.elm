@@ -91,13 +91,18 @@ viewNav =
         ]
 
 
+path : String -> String -> String -> String
+path folder name ext =
+    "./" ++ folder ++ "/" ++ name ++ ext
+    
+
 viewVideoThumb : Status -> String -> String -> String -> Html Msg
 viewVideoThumb status folder name classes =
-    let mp4Thumb   = "./" ++ folder ++ "/" ++ name ++ "_thumb.mp4"
-        webmThumb  = "./" ++ folder ++ "/" ++ name ++ "_thumb.webm"
-        mp4Full    = "./" ++ folder ++ "/" ++ name ++ ".mp4"
-        webmFull   = "./" ++ folder ++ "/" ++ name ++ ".webm"
-        vidPoster  = "./" ++ folder ++ "/" ++ name ++ ".jpg"
+    let mp4Thumb   = path folder name "_thumb.mp4"
+        webmThumb  = path folder name "_thumb.webm"
+        mp4Full    = path folder name ".mp4"
+        webmFull   = path folder name ".webm"
+        vidPoster  = path folder name ".jpg"
     in
     viewTogglableFigure status name classes
         [ div [ class "thumbnail" ]
@@ -110,8 +115,8 @@ viewVideoThumb status folder name classes =
 
 viewVideoThumbNoThumbFile : Status -> String -> String -> String -> Html Msg
 viewVideoThumbNoThumbFile status folder name classes =
-    let mp4Full    = "./" ++ folder ++ "/" ++ name ++ ".mp4"
-        webmFull   = "./" ++ folder ++ "/" ++ name ++ ".webm"
+    let mp4Full    = path folder name ".mp4"
+        webmFull   = path folder name ".webm"
     in
     viewTogglableFigure status name classes
         [ div [ class "thumbnail" ]
@@ -126,12 +131,12 @@ viewImageThumb : Status -> String -> String -> String -> String -> String -> Htm
 viewImageThumb status folder name ext altName classes =
     viewTogglableFigure status name classes
         [ div [ class "thumbnail" ]
-            [ viewLazyImg ("./"++ folder ++"/"++ name ++"_thumb."++ ext) altName
+            [ viewLazyImg (path folder name ("_thumb."++ ext)) altName
             , viewLoading
             ]
         , htmlIf (status == ViewingMedia name) <|
             div [ class "fullsize visible" ]
-                [ viewLazyImg ("./"++ folder ++"/"++ name ++"."++ ext) altName ]
+                [ viewLazyImg (path folder name ext) altName ]
         ]
 
 
