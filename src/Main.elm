@@ -80,8 +80,8 @@ update msg model =
 -- VIEW
 
 
-type alias TitleAndView =
-    { pageFunction : Status -> Html Content.Msg
+type alias ViewAndTitle =
+    { viewPage : Status -> Html Content.Msg
     , title : String
     }
 
@@ -89,22 +89,22 @@ type alias TitleAndView =
 view : Model -> Document Msg
 view model =
     let
-        {pageFunction, title} =
+        {viewPage, title} =
             case extractRoute model.route of
                 "where_to_get" ->
-                    TitleAndView WhereToGet.view "Where to read Yokohama Kaidashi Kikou and buy its merch? - Alpha Café"
+                    ViewAndTitle WhereToGet.view "Where to read Yokohama Kaidashi Kikou and buy its merch? - Alpha Café"
 
                 "links" ->
-                    TitleAndView Links.view "YKK-related links - Alpha Café"
+                    ViewAndTitle Links.view "YKK-related links - Alpha Café"
 
                 _ ->
-                    TitleAndView Home.view "Alpha Café, everything about YKK!"
+                    ViewAndTitle Home.view "Alpha Café, everything about YKK!"
     in
     { title = title
     , body =
         [ a [ id "top" ] []
         , viewHeader
-        , Html.map ContentMsg (pageFunction model.content.status)
+        , viewPage model.content.status |> Html.map ContentMsg
         , footer []
             [ p [] [ a [ href "#top", target "_self" ] [ text "Jump to top" ] ] ]
         ]
