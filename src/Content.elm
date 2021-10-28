@@ -1,10 +1,29 @@
-module Content exposing (update, viewHeader, viewPageMain, viewSection, viewVideoThumb, viewVideoThumbNoThumbFile, md, viewQuote, nestedLi, viewImageThumb, link, liLink, lineBreak, Status, Msg, Model, init)
+module Content exposing
+    ( Model
+    , Msg
+    , Status
+    , init
+    , liLink
+    , lineBreak
+    , link
+    , md
+    , nestedLi
+    , update
+    , viewHeader
+    , viewImageThumb
+    , viewPageMain
+    , viewQuote
+    , viewSection
+    , viewVideoThumb
+    , viewVideoThumbNoThumbFile
+    )
+
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
+import Json.Encode
 import Markdown.Parser as MD
 import Markdown.Renderer as MDRenderer
-import Html exposing (..)
-import Html.Events exposing (onClick)
-import Html.Attributes exposing (..)
-import Json.Encode
 
 
 
@@ -94,17 +113,29 @@ viewNav =
 path : String -> String -> String -> String
 path folder name ext =
     "./" ++ folder ++ "/" ++ name ++ ext
-    
+
 
 viewVideoThumb : Status -> String -> String -> String -> Html Msg
 viewVideoThumb status folder name classes =
-    let mp4Thumb   = path folder name "_thumb.mp4"
-        webmThumb  = path folder name "_thumb.webm"
-        mp4Full    = path folder name ".mp4"
-        webmFull   = path folder name ".webm"
-        vidPoster  = path folder name ".jpg"
+    let
+        mp4Thumb =
+            path folder name "_thumb.mp4"
+
+        webmThumb =
+            path folder name "_thumb.webm"
+
+        mp4Full =
+            path folder name ".mp4"
+
+        webmFull =
+            path folder name ".webm"
+
+        vidPoster =
+            path folder name ".jpg"
     in
-    viewTogglableFigure status name classes
+    viewTogglableFigure status
+        name
+        classes
         [ div [ class "thumbnail" ]
             [ viewThumbVid mp4Thumb webmThumb, viewLoading ]
         , htmlIf (status == ViewingMedia name) <|
@@ -115,12 +146,18 @@ viewVideoThumb status folder name classes =
 
 viewVideoThumbNoThumbFile : Status -> String -> String -> String -> Html Msg
 viewVideoThumbNoThumbFile status folder name classes =
-    let mp4Full    = path folder name ".mp4"
-        webmFull   = path folder name ".webm"
+    let
+        mp4Full =
+            path folder name ".mp4"
+
+        webmFull =
+            path folder name ".webm"
     in
-    viewTogglableFigure status name classes
+    viewTogglableFigure status
+        name
+        classes
         [ div [ class "thumbnail" ]
-            [ viewThumbVid mp4Full webmFull , viewLoading ]
+            [ viewThumbVid mp4Full webmFull, viewLoading ]
         , htmlIf (status == ViewingMedia name) <|
             div [ class "fullsize visible" ]
                 [ viewFullVid mp4Full webmFull "" ]
@@ -129,9 +166,11 @@ viewVideoThumbNoThumbFile status folder name classes =
 
 viewImageThumb : Status -> String -> String -> String -> String -> String -> Html Msg
 viewImageThumb status folder name ext altName classes =
-    viewTogglableFigure status name classes
+    viewTogglableFigure status
+        name
+        classes
         [ div [ class "thumbnail" ]
-            [ viewLazyImg (path folder name ("_thumb."++ ext)) altName
+            [ viewLazyImg (path folder name ("_thumb." ++ ext)) altName
             , viewLoading
             ]
         , htmlIf (status == ViewingMedia name) <|
@@ -144,7 +183,11 @@ viewTogglableFigure : Status -> String -> String -> List (Html Msg) -> Html Msg
 viewTogglableFigure status name classes children =
     let
         clickAction =
-            if status == ViewingMedia name then ClearMedia else ViewMedia name
+            if status == ViewingMedia name then
+                ClearMedia
+
+            else
+                ViewMedia name
     in
     figure [ class ("thumb_enlarger " ++ classes), onClick clickAction ] children
 
@@ -165,7 +208,13 @@ viewThumbVid srcMp4 srcWebm =
 
 viewFullVid : String -> String -> String -> Html msg
 viewFullVid srcMp4 srcWebm vidPoster =
-    let thumb = if String.length vidPoster > 0 then [ poster vidPoster ] else []
+    let
+        thumb =
+            if String.length vidPoster > 0 then
+                [ poster vidPoster ]
+
+            else
+                []
     in
     video ([ property "loop" (Json.Encode.bool True), controls True ] ++ thumb)
         [ source [ src srcMp4, type_ "video/mp4" ] []
@@ -188,8 +237,11 @@ viewPageMain mainTitle children =
 md : String -> Html msg
 md markdownBody =
     case List.head (mdParser markdownBody) of
-        Just parag -> parag
-        Nothing    -> p [] []
+        Just parag ->
+            parag
+
+        Nothing ->
+            p [] []
 
 
 nestedLi : List (Html msg) -> Html msg
@@ -204,23 +256,31 @@ mdParser markdownBody =
             |> Result.mapError (List.map MD.deadEndToString >> String.join "\n")
             |> Result.andThen (MDRenderer.render MDRenderer.defaultHtmlRenderer)
     of
-        Ok rendered -> rendered
-        Err errors  -> [ text errors ]
+        Ok rendered ->
+            rendered
+
+        Err errors ->
+            [ text errors ]
 
 
 htmlIf : Bool -> Html msg -> Html msg
 htmlIf cond el =
-    if cond then el else text ""
+    if cond then
+        el
 
+    else
+        text ""
 
 
 link : String -> String -> Html msg
 link url displayedText =
     a [ href url ] [ text displayedText ]
 
+
 liLink : String -> String -> Html msg
 liLink url displayedText =
     li [] [ link url displayedText ]
+
 
 lineBreak : Html msg
 lineBreak =

@@ -1,7 +1,8 @@
 module Home exposing (view)
+
+import Content exposing (Msg, Status, md, viewImageThumb, viewPageMain, viewQuote, viewSection, viewVideoThumb, viewVideoThumbNoThumbFile)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Content exposing (..)
 
 
 view : Status -> Html Msg
