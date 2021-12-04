@@ -22,6 +22,7 @@ view : List (Html msg)
 view =
     [ H.section []
         [ activeCommunities
+        , otherFansites
         , artAndFanContent
         , databases
         , inactiveCommunities
@@ -55,12 +56,22 @@ activeCommunities =
         ]
 
 
+otherFansites : Html msg
+otherFansites =
+    listSection "Other fansites"
+        [ Hlp.liLink "YKK - Behind the Panels. Old English fansite with fascinating trivia" "http://kimoto.cc/ykk/"
+        , Hlp.liLink "http://uheei.yu-nagi.com/main_000.html" "http://uheei.yu-nagi.com/main_000.html"
+        , Hlp.liLink "http://www.din.or.jp/~ems/ms_index.htm (slightly NSFW)" "http://www.din.or.jp/~ems/ms_index.htm"
+        , Hlp.liLink "https://cafe-alpha.org/cafealpha/index.htm" "https://cafe-alpha.org/cafealpha/index.htm"
+        ]
+
+
 artAndFanContent : Html msg
 artAndFanContent =
     listSection "Art and fan content"
         [ item
             [ Hlp.link "Danbooru" "https://danbooru.donmai.us/posts?page=1&tags=yokohama_kaidashi_kikou"
-            , H.text "(fanart and official art, may include NSFW)"
+            , H.text " (fanart and official art, may include NSFW)"
             ]
         , item
             [ Hlp.link "FanFiction.net" "https://www.fanfiction.net/anime/Yokohama-Kaidashi-Kikou"

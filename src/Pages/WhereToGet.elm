@@ -36,6 +36,13 @@ whereToReadAndWatch =
         [ md "YKK was never officially translated, so we rely on fan translations. Read on to [the next section](#buy_merch) if you are interested in buying untranslated media!"
         , md "The current best English scanlation for the manga is Yugen's by far. You can [download the scanlation on Yugen's website](https://www.yugenykk.org/), or [read it online on MangaDex](https://mangadex.org/chapter/168339/1)."
         , md "For the anime, both OVAs are [conveniently viewable on YouTube](https://www.youtube.com/watch?v=C2HCVOH6DtA) at the moment. Higher-quality downloads can be found around the web -- feel free to ask on [Discord](/links) for guidance."
+        , md "Non-English official translations exist in:"
+        , H.ul []
+            [ Hlp.liLink "Korean (카페 알파)" "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=123521546"
+            , Hlp.liLink "Indonesian (Yokohama Shopping Blog)" "https://shopee.co.id/Komik-M-C-Yokohama-Shopping-Blog-(Hitoshi-Ashinano)-1-14-(End)-i.18501247.2214024072"
+            , Hlp.liLink "Traditional Chinese (橫濱購物紀行)" "https://www.tongli.com.tw/BooksDetail.aspx?BD=KC31610"
+            , Hlp.liLink "French (Escale à Yokohama)" "https://www.meian-editions.fr/meian/produit/escale-a-yokohama-tome-1-livre-manga/3153"
+            ]
         ]
     }
 
@@ -142,7 +149,7 @@ merchList =
                 , H.ul []
                     [ H.li [] [ H.text "1 ", Hlp.link "key chain" "https://imgur.com/a/lYeo7H9", H.text "that I've seen so far, it is of the iconic fish design." ]
                     , H.li [] [ H.text "1 ", Hlp.link "tea set" "https://i.imgur.com/7uGUwq3.jpg", H.text "(cup, saucer, spoon)" ]
-                    , H.li [] [ H.text "Phone cards: there are ", Hlp.link "8 \"normal\" ones" "https ://imgur.com/a/Rb4BBfD", H.text ", and 1 ", Hlp.link "special edition" "https://imgur.com/a/547KL", H.text "that comes in fancy packaging, making 9 total." ]
+                    , H.li [] [ H.text "Phone cards: there are ", Hlp.link "14 \"normal\" ones" "https ://imgur.com/a/Rb4BBfD", H.text ", and 2 ", Hlp.link "special edition" "https://imgur.com/a/547KL", H.text "that comes in fancy packaging, making 9 total." ]
                     , H.li [] [ H.text "Multiple doujinshi, with several containing ", Hlp.link "sketches" "https://imgur.com/a/EbRSC2Q", H.text "and interviews from Ashinano" ]
                     , H.li [] [ H.text "1 tote bag" ]
                     , H.li [] [ H.text "3 coasters: ", Hlp.link "2 which were available to the public" "https://imgur.com/a/roOtkeS", H.text "and ", Hlp.link "1 that was intended for promotional use only" "https://i.imgur.com/FSCcxMK.jpg", H.text "." ]
