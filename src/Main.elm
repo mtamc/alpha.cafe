@@ -2,14 +2,14 @@ module Main exposing (main)
 
 import Browser exposing (Document)
 import Browser.Navigation as Nav
-import Components as C
-import FullsizeImageViewer as V
-import Helpers as Hlp
+import Components
 import Html
+import ImageViewer
 import Pages.Home
 import Pages.Links
 import Pages.WhereToGet
 import Url
+import Utils
 
 
 
@@ -36,22 +36,16 @@ type alias Model =
     { title : String
     , key : Nav.Key
     , route : String
-    , imageViewer : V.Model
+    , imageViewer : ImageViewer.Status
     }
-
-
-type Msg
-    = LinkClicked Browser.UrlRequest
-    | UrlChanged Url.Url
-    | ImageViewerUpdated V.Msg
 
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     ( { title = "Alpha Café"
       , key = key
-      , route = Hlp.parseUrl url
-      , imageViewer = V.init
+      , route = Utils.parseUrl url
+      , imageViewer = ImageViewer.init
       }
     , Cmd.none
     )
@@ -61,11 +55,17 @@ init _ url key =
 -- UPDATE
 
 
+type Msg
+    = LinkClicked Browser.UrlRequest
+    | UrlChanged Url.Url
+    | ImageViewerMsg ImageViewer.Msg
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlChanged url ->
-            ( { model | route = Hlp.parseUrl url }
+            ( { model | route = Utils.parseUrl url }
             , Cmd.none
             )
 
@@ -81,8 +81,8 @@ update msg model =
                     , Nav.load href
                     )
 
-        ImageViewerUpdated viewerMsg ->
-            ( { model | imageViewer = V.update viewerMsg }
+        ImageViewerMsg viewerMsg ->
+            ( { model | imageViewer = ImageViewer.update viewerMsg }
             , Cmd.none
             )
 
@@ -91,7 +91,7 @@ update msg model =
 -- VIEW
 
 
-routeToPage : String -> C.PageData V.Model V.Msg
+routeToPage : String -> Components.PageData ImageViewer.Status ImageViewer.Msg
 routeToPage route =
     case route of
         "where_to_get" ->
@@ -112,9 +112,9 @@ view model =
     in
     { title = page.windowTitle
     , body =
-        [ C.pageHeader
-        , C.pageMain page.h1Text (page.view model.imageViewer)
-            |> Html.map ImageViewerUpdated
-        , C.pageFooter
+        [ Components.pageHeader
+        , Components.pageMain page.h1Text (page.view model.imageViewer)
+            |> Html.map ImageViewerMsg
+        , Components.pageFooter
         ]
     }

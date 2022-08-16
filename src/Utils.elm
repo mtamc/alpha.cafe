@@ -1,4 +1,4 @@
-module Helpers exposing
+module Utils exposing
     ( callWithArg
     , lazyImg
     , liLink

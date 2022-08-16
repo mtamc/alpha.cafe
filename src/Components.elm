@@ -1,6 +1,6 @@
 module Components exposing
-    ( PageData
-    , PageSection
+    ( ArticleSection
+    , PageData
     , blockquote
     , loadingAnim
     , pageFooter
@@ -9,19 +9,19 @@ module Components exposing
     , pageSection
     )
 
-import Helpers as Hlp
-import Html as H exposing (Html)
+import Html exposing (Html)
 import Html.Attributes as HA
+import Utils
 
 
-type alias PageData model msg =
+type alias PageData viewParam msg =
     { windowTitle : String
     , h1Text : String
-    , view : model -> List (Html msg)
+    , view : viewParam -> List (Html msg)
     }
 
 
-type alias PageSection msg =
+type alias ArticleSection msg =
     { title : String
     , htmlId : String
     , content : List (Html msg)
@@ -30,22 +30,22 @@ type alias PageSection msg =
 
 loadingAnim : Html msg
 loadingAnim =
-    H.div [ HA.class "loading_ring" ]
-        [ H.div [] [], H.div [] [], H.div [] [], H.div [] [] ]
+    Html.div [ HA.class "loading_ring" ]
+        [ Html.div [] [], Html.div [] [], Html.div [] [], Html.div [] [] ]
 
 
 blockquote : String -> String -> Html msg
 blockquote signature content =
-    H.blockquote []
-        [ Hlp.md content
-        , H.footer [] [ Hlp.md ("— " ++ signature) ]
+    Html.blockquote []
+        [ Utils.md content
+        , Html.footer [] [ Utils.md ("— " ++ signature) ]
         ]
 
 
 pageHeader : Html msg
 pageHeader =
-    H.header []
-        [ H.a [ HA.id "top" ] []
+    Html.header []
+        [ Html.a [ HA.id "top" ] []
         , musicButton
         , siteMenu
         ]
@@ -53,15 +53,15 @@ pageHeader =
 
 pageMain : String -> List (Html msg) -> Html msg
 pageMain mainTitle children =
-    H.main_ []
-        (H.h1 [] [ H.text mainTitle ]
+    Html.main_ []
+        (Html.h1 [] [ Html.text mainTitle ]
             :: children
         )
 
 
-pageSection : PageSection msg -> Html msg
+pageSection : ArticleSection msg -> Html msg
 pageSection data =
-    H.section []
+    Html.section []
         (heading data.title data.htmlId
             :: data.content
         )
@@ -69,10 +69,10 @@ pageSection data =
 
 pageFooter : Html msg
 pageFooter =
-    H.footer []
-        [ H.p []
-            [ H.a [ HA.href "#top", HA.target "_self" ]
-                [ H.text "Jump to top" ]
+    Html.footer []
+        [ Html.p []
+            [ Html.a [ HA.href "#top", HA.target "_self" ]
+                [ Html.text "Jump to top" ]
             ]
         ]
 
@@ -85,22 +85,22 @@ musicButton : Html msg
 musicButton =
     let
         btn =
-            H.span [ HA.class "song_title" ]
-                [ H.div [ HA.id "header_play_button" ] []
-                , H.text "BGM"
+            Html.span [ HA.class "song_title" ]
+                [ Html.div [ HA.id "header_play_button" ] []
+                , Html.text "BGM"
                 ]
 
         audioTag =
-            H.audio
+            Html.audio
                 [ HA.id "ost"
                 , HA.class "audioplay-player"
                 , HA.preload "none"
                 ]
-                [ H.source [ HA.src "./ykk_ost.mp3" ] []
-                , H.text "Your browser doesn't support audio element."
+                [ Html.source [ HA.src "./ykk_ost.mp3" ] []
+                , Html.text "Your browser doesn't support audio element."
                 ]
     in
-    H.div [ HA.id "music_player" ]
+    Html.div [ HA.id "music_player" ]
         [ btn
         , audioTag
         ]
@@ -108,21 +108,21 @@ musicButton =
 
 siteMenu : Html msg
 siteMenu =
-    H.nav []
-        [ Hlp.link "Home" "/"
-        , Hlp.link "Where to get YKK (& merch)" "/where_to_get"
-        , Hlp.link "YKK communities & links" "/links"
+    Html.nav []
+        [ Utils.link "Home" "/"
+        , Utils.link "Where to get YKK (& merch)" "/where_to_get"
+        , Utils.link "YKK communities & links" "/links"
         ]
 
 
 heading : String -> String -> Html msg
 heading title htmlId =
-    H.a
+    Html.a
         [ HA.href ("#" ++ htmlId)
         , HA.class "heading"
         , HA.target "_self" -- prevents Elm from hijacking URL anchor
         ]
-        [ H.h2
+        [ Html.h2
             [ HA.id htmlId ]
-            [ H.text title ]
+            [ Html.text title ]
         ]

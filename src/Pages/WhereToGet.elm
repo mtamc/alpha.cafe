@@ -1,12 +1,12 @@
 module Pages.WhereToGet exposing (page)
 
-import Components as C
-import FullsizeImageViewer as V
-import Helpers as Hlp exposing (md)
-import Html as H exposing (Html)
+import Components
+import Html exposing (Html)
+import ImageViewer
+import Utils exposing (md)
 
 
-page : C.PageData V.Model V.Msg
+page : Components.PageData ImageViewer.Status ImageViewer.Msg
 page =
     { windowTitle = "Where to read Yokohama Kaidashi Kikou?"
     , h1Text = "Finding Yokohama Kaidashi Kikou and its merchandise"
@@ -16,157 +16,155 @@ page =
 
 {-| TODO: Because the CSS was written when the site was just HTML+CSS,
 this cannot fully use Markdown.
-Long term, this should, however migrating will take a lot of time.
-If you want to see a page with Markdown, check out Home.elm
+Long term, this should; however, migrating will take a lot of time.
 -}
-view : V.Model -> List (Html V.Msg)
+view : ImageViewer.Status -> List (Html ImageViewer.Msg)
 view viewerStatus =
     [ whereToReadAndWatch
     , whereToBuyMerch viewerStatus
     , merchList
     ]
-        |> List.map C.pageSection
+        |> List.map Components.pageSection
 
 
-whereToReadAndWatch : C.PageSection V.Msg
+whereToReadAndWatch : Components.ArticleSection msg
 whereToReadAndWatch =
     { title = "Where to read and watch YKK?"
     , htmlId = "read_and_watch"
     , content =
-        [ md "YKK was never officially translated, so we rely on fan translations. Read on to [the next section](#buy_merch) if you are interested in buying untranslated media!"
-        , md "The current best English scanlation for the manga is Yugen's by far. You can [download the scanlation on Yugen's website](https://www.yugenykk.org/), or [read it online on MangaDex](https://mangadex.org/chapter/168339/1)."
+        [ md "[Seven Seas has announced](https://sevenseasentertainment.com/2022/02/16/seven-seas-licenses-yokohama-kaidashi-kikou-manga-omnibus-series/) on February 16, 2022 that they have acquired the license to YKK and will publish oversized omnibus editions! Read on to [the next section](#buy_merch) if you are interested in buying untranslated media!"
         , md "For the anime, both OVAs are [conveniently viewable on YouTube](https://www.youtube.com/watch?v=C2HCVOH6DtA) at the moment. Higher-quality downloads can be found around the web -- feel free to ask on [Discord](/links) for guidance."
         , md "Non-English official translations exist in:"
-        , H.ul []
-            [ Hlp.liLink "Korean (카페 알파)" "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=123521546"
-            , Hlp.liLink "Indonesian (Yokohama Shopping Blog)" "https://shopee.co.id/Komik-M-C-Yokohama-Shopping-Blog-(Hitoshi-Ashinano)-1-14-(End)-i.18501247.2214024072"
-            , Hlp.liLink "Traditional Chinese (橫濱購物紀行)" "https://www.tongli.com.tw/BooksDetail.aspx?BD=KC31610"
-            , Hlp.liLink "French (Escale à Yokohama)" "https://www.meian-editions.fr/meian/produit/escale-a-yokohama-tome-1-livre-manga/3153"
+        , Html.ul []
+            [ Utils.liLink "Korean (카페 알파)" "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=123521546"
+            , Utils.liLink "Indonesian (Yokohama Shopping Blog)" "https://shopee.co.id/Komik-M-C-Yokohama-Shopping-Blog-(Hitoshi-Ashinano)-1-14-(End)-i.18501247.2214024072"
+            , Utils.liLink "Traditional Chinese (橫濱購物紀行)" "https://www.tongli.com.tw/BooksDetail.aspx?BD=KC31610"
+            , Utils.liLink "French (Escale à Yokohama)" "https://www.meian-editions.fr/meian/produit/escale-a-yokohama-tome-1-livre-manga/3153"
             ]
         ]
     }
 
 
-whereToBuyMerch : V.Model -> C.PageSection V.Msg
+whereToBuyMerch : ImageViewer.Status -> Components.ArticleSection ImageViewer.Msg
 whereToBuyMerch viewerStatus =
     { title = "Where to buy YKK merchandise?"
     , htmlId = "buy_merch"
     , content =
-        [ V.imgThumb viewerStatus "merch" "dangeresque_shelf" "jpg" "Danger's collection" "large right"
+        [ ImageViewer.imgThumb viewerStatus "merch" "dangeresque_shelf" "jpg" "Danger's collection" "large right"
         , md "*This section summarizes [DangeresqueIII's reddit guide](https://www.reddit.com/r/YKK/comments/jfu1g6/a_list_of_ykk_merch_and_where_to_buy_it/) with his permission.*"
         , md "As you will be buying from Japanese websites, remember to search for the Japanese title ヨコハマ買い出し紀行."
         , md "Here are Danger's favourite sites to buy YKK merch."
-        , H.ul []
-            [ H.li []
-                [ Hlp.link "ebay.com" "https://ebay.com"
-                , Hlp.nestedLi [ H.text "Manga, art book, postcard book, DVDs. Other merch rare." ]
+        , Html.ul []
+            [ Html.li []
+                [ Utils.link "ebay.com" "https://ebay.com"
+                , Utils.nestedLi [ Html.text "Manga, art book, postcard book, DVDs. Other merch rare." ]
                 ]
-            , H.li []
-                [ Hlp.link "amazon.co.jp" "https://amazon.co.jp"
-                , Hlp.nestedLi [ H.text "Sometimes cheaper than eBay and slightly more merch, e.g. OSTs, drama CDs, novel." ]
+            , Html.li []
+                [ Utils.link "amazon.co.jp" "https://amazon.co.jp"
+                , Utils.nestedLi [ Html.text "Sometimes cheaper than eBay and slightly more merch, e.g. OSTs, drama CDs, novel." ]
                 ]
-            , H.li []
-                [ Hlp.link "auctions.yahoo.co.jp" "https://auctions.yahoo.co.jp"
-                , Hlp.nestedLi [ H.text "This is where you'll find most of the derivative merchandise as seen in the list below, e.g. cels, figurines, doujin, etc. Browse through Google Translate or a browser translation extension." ]
+            , Html.li []
+                [ Utils.link "auctions.yahoo.co.jp" "https://auctions.yahoo.co.jp"
+                , Utils.nestedLi [ Html.text "This is where you'll find most of the derivative merchandise as seen in the list below, e.g. cels, figurines, doujin, etc. Browse through Google Translate or a browser translation extension." ]
                 ]
             ]
         , md "Many items do not ship outside of Japan, so you will need to use a proxy service such as Jauce, Buyee.jp or Zenmarket.jp. Here are Danger's pointers for Jauce:"
-        , H.ul []
-            [ H.li [] [ H.text "Deposit money into your Jauce account. (As much as you're willing to bid on the item you're interested in)" ]
-            , H.li [] [ H.text "Place your max bid and wait. If you win the auction with a lower amount than your maximum, you can get the difference refunded (with a fee) or keep it to bid on other items." ]
-            , H.li [] [ H.text "As an example, shipping to California takes about a week." ]
+        , Html.ul []
+            [ Html.li [] [ Html.text "Deposit money into your Jauce account. (As much as you're willing to bid on the item you're interested in)" ]
+            , Html.li [] [ Html.text "Place your max bid and wait. If you win the auction with a lower amount than your maximum, you can get the difference refunded (with a fee) or keep it to bid on other items." ]
+            , Html.li [] [ Html.text "As an example, shipping to California takes about a week." ]
             ]
         ]
     }
 
 
-merchList : C.PageSection V.Msg
+merchList : Components.ArticleSection msg
 merchList =
     { title = "List of YKK merchandise"
     , htmlId = "merch_list"
     , content =
         [ md "*This section summarizes [DangeresqueIII's reddit guide](https://www.reddit.com/r/YKK/comments/jfu1g6/a_list_of_ykk_merch_and_where_to_buy_it/) with his permission. Click on the links for pictures.*"
-        , H.ul []
-            [ H.li []
-                [ H.text "Manga:"
-                , H.ul []
-                    [ H.li [] [ H.text "14-volume ", Hlp.link "original release" "https://i.imgur.com/6IfNyJ5.jpg" ]
-                    , H.li [] [ H.text "10-volume ", Hlp.link "re-release" "https://i.imgur.com/n16FMii.jpg" ]
-                    , H.li [] [ H.text "10 ", Hlp.link "issues of the original Monthly Afternoon" "https://imgur.com/a/pnwzLoH", H.text " that YKK was serialized in" ]
-                    , H.li [] [ H.text "Kindle version available from Amazon.jp" ]
+        , Html.ul []
+            [ Html.li []
+                [ Html.text "Manga:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "14-volume ", Utils.link "original release" "https://i.imgur.com/6IfNyJ5.jpg" ]
+                    , Html.li [] [ Html.text "10-volume ", Utils.link "re-release" "https://i.imgur.com/n16FMii.jpg" ]
+                    , Html.li [] [ Html.text "10 ", Utils.link "issues of the original Monthly Afternoon" "https://imgur.com/a/pnwzLoH", Html.text " that YKK was serialized in" ]
+                    , Html.li [] [ Html.text "Kindle version available from Amazon.jp" ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Novel:"
-                , H.ul []
-                    [ H.li [] [ H.text "1 novel with ", Hlp.link "a few illustrations from Ashinano" "https://i.imgur.com/cQlhblw.jpg", H.text ", called Yokohama Kaidashi Kikou Novel: Seeing, Walking, Being Glad 小説 ヨコハマ買い出し紀行―見て、歩き、よろこぶ者" ]
+            , Html.li []
+                [ Html.text "Novel:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "1 novel with ", Utils.link "a few illustrations from Ashinano" "https://i.imgur.com/cQlhblw.jpg", Html.text ", called Yokohama Kaidashi Kikou Novel: Seeing, Walking, Being Glad 小説 ヨコハマ買い出し紀行―見て、歩き、よろこぶ者" ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Anime:"
-                , H.ul []
-                    [ H.li [] [ H.text "2 ", Hlp.link "VHS releases" "https://imgur.com/a/Fjkclzg", H.text ", one for each episode of the first OVA" ]
-                    , H.li [] [ H.text "1 ", Hlp.link "VHS release" "https://i.imgur.com/8QIuqnv.jpg", H.text " for the second episode of the second OVA (extremely rare)" ]
-                    , H.li [] [ H.text "2 ", Hlp.link "Laserdisc releases" "https://imgur.com/a/FWjIFxE", H.text ", one for each episode of the first OVA" ]
-                    , H.li [] [ H.text "3 ", Hlp.link "DVD releases" "https://i.imgur.com/qeGiGmt.jpg", H.text ", one disc that contains both episodes of the first OVA, and two discs that contain one episode each of the second OVA" ]
+            , Html.li []
+                [ Html.text "Anime:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "2 ", Utils.link "VHS releases" "https://imgur.com/a/Fjkclzg", Html.text ", one for each episode of the first OVA" ]
+                    , Html.li [] [ Html.text "1 ", Utils.link "VHS release" "https://i.imgur.com/8QIuqnv.jpg", Html.text " for the second episode of the second OVA (extremely rare)" ]
+                    , Html.li [] [ Html.text "2 ", Utils.link "Laserdisc releases" "https://imgur.com/a/FWjIFxE", Html.text ", one for each episode of the first OVA" ]
+                    , Html.li [] [ Html.text "3 ", Utils.link "DVD releases" "https://i.imgur.com/qeGiGmt.jpg", Html.text ", one disc that contains both episodes of the first OVA, and two discs that contain one episode each of the second OVA" ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Soundtracks:"
-                , H.ul []
-                    [ H.li [] [ H.text "2 ", Hlp.link "CDs of OSTs" "https://i.imgur.com/zhbb3RI.jpg", H.text ", one for each OVA series" ]
-                    , H.li [] [ H.text "3 ", Hlp.link "CDs of Audio Dramas" "https://i.imgur.com/ikoFtwF.jpg", H.text ". They feature the same voice actors from the anime, and cover parts of the manga the anime didn't" ]
+            , Html.li []
+                [ Html.text "Soundtracks:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "2 ", Utils.link "CDs of OSTs" "https://i.imgur.com/zhbb3RI.jpg", Html.text ", one for each OVA series" ]
+                    , Html.li [] [ Html.text "3 ", Utils.link "CDs of Audio Dramas" "https://i.imgur.com/ikoFtwF.jpg", Html.text ". They feature the same voice actors from the anime, and cover parts of the manga the anime didn't" ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Art:"
-                , H.ul []
-                    [ H.li [] [ H.text "1 ", Hlp.link "artbook" "https://i.imgur.com/7VAff4a.jpg" ]
-                    , H.li [] [ H.text "1 ", Hlp.link "collection of postcards" "https://i.imgur.com/31TzBCS.jpg", H.text " in book form" ]
+            , Html.li []
+                [ Html.text "Art:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "1 ", Utils.link "artbook" "https://i.imgur.com/7VAff4a.jpg" ]
+                    , Html.li [] [ Html.text "1 ", Utils.link "collection of postcards" "https://i.imgur.com/31TzBCS.jpg", Html.text " in book form" ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Calendars:"
-                , H.ul []
-                    [ H.li [] [ Hlp.link "6 different versions found so far." "https://imgur.com/a/COiBHT3", H.text " 5 traditional that you hang on your wall (one not pictured), and 1 that is more of a notebook style" ]
+            , Html.li []
+                [ Html.text "Calendars:"
+                , Html.ul []
+                    [ Html.li [] [ Utils.link "6 different versions found so far." "https://imgur.com/a/COiBHT3", Html.text " 5 traditional that you hang on your wall (one not pictured), and 1 that is more of a notebook style" ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Figurines:"
-                , H.ul []
-                    [ H.li [] [ H.text "2 official figs made, one of ", Hlp.link "Alpha" "https://i.imgur.com/rYlwhdW.jpg", H.text ", one of ", Hlp.link "https://i.imgur.com/43JmfQD.jpg" "Kokone" ]
-                    , H.li [] [ H.text "Multiple ", Hlp.link "garage kits" "https://imgur.com/a/1GVKikF", H.text " (fan made) available, I have seen 4 different ones but there probably is more." ]
+            , Html.li []
+                [ Html.text "Figurines:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "2 official figs made, one of ", Utils.link "Alpha" "https://i.imgur.com/rYlwhdW.jpg", Html.text ", one of ", Utils.link "https://i.imgur.com/43JmfQD.jpg" "Kokone" ]
+                    , Html.li [] [ Html.text "Multiple ", Utils.link "garage kits" "https://imgur.com/a/1GVKikF", Html.text " (fan made) available, I have seen 4 different ones but there probably is more." ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Animation Sketches and Cels:"
-                , H.ul []
-                    [ H.li [] [ H.text "These are hard to find ", Hlp.link "but they do pop up once in a while." "https://imgur.com/a/b93ndc5", H.text "But be prepared to spend some money, especially for cels from the first OVA." ]
+            , Html.li []
+                [ Html.text "Animation Sketches and Cels:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "These are hard to find ", Utils.link "but they do pop up once in a while." "https://imgur.com/a/b93ndc5", Html.text "But be prepared to spend some money, especially for cels from the first OVA." ]
                     ]
                 ]
-            , H.li []
-                [ H.text "Other:"
-                , H.ul []
-                    [ H.li [] [ H.text "1 ", Hlp.link "key chain" "https://imgur.com/a/lYeo7H9", H.text "that I've seen so far, it is of the iconic fish design." ]
-                    , H.li [] [ H.text "1 ", Hlp.link "tea set" "https://i.imgur.com/7uGUwq3.jpg", H.text "(cup, saucer, spoon)" ]
-                    , H.li [] [ H.text "Phone cards: there are ", Hlp.link "14 \"normal\" ones" "https ://imgur.com/a/Rb4BBfD", H.text ", and 2 ", Hlp.link "special edition" "https://imgur.com/a/547KL", H.text "that comes in fancy packaging, making 9 total." ]
-                    , H.li [] [ H.text "Multiple doujinshi, with several containing ", Hlp.link "sketches" "https://imgur.com/a/EbRSC2Q", H.text "and interviews from Ashinano" ]
-                    , H.li [] [ H.text "1 tote bag" ]
-                    , H.li [] [ H.text "3 coasters: ", Hlp.link "2 which were available to the public" "https://imgur.com/a/roOtkeS", H.text "and ", Hlp.link "1 that was intended for promotional use only" "https://i.imgur.com/FSCcxMK.jpg", H.text "." ]
-                    , H.li [] [ H.text "1 mug (I've only seen ", Hlp.link "one of these" "https://imgur.com/a/NFKxDEO", H.text "sold and it was last week for 24,300 yen)" ]
-                    , H.li [] [ H.text "1 ", Hlp.link "dakimakura" "https://imgur.com/a/wMrTB07", H.text " (this is extremely rare, be prepared to pay through the nose if you find one for sale)" ]
+            , Html.li []
+                [ Html.text "Other:"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "1 ", Utils.link "key chain" "https://imgur.com/a/lYeo7H9", Html.text "that I've seen so far, it is of the iconic fish design." ]
+                    , Html.li [] [ Html.text "1 ", Utils.link "tea set" "https://i.imgur.com/7uGUwq3.jpg", Html.text "(cup, saucer, spoon)" ]
+                    , Html.li [] [ Html.text "Phone cards: there are ", Utils.link "14 \"normal\" ones" "https ://imgur.com/a/Rb4BBfD", Html.text ", and 2 ", Utils.link "special edition" "https://imgur.com/a/547KL", Html.text "that comes in fancy packaging, making 9 total." ]
+                    , Html.li [] [ Html.text "Multiple doujinshi, with several containing ", Utils.link "sketches" "https://imgur.com/a/EbRSC2Q", Html.text "and interviews from Ashinano" ]
+                    , Html.li [] [ Html.text "1 tote bag" ]
+                    , Html.li [] [ Html.text "3 coasters: ", Utils.link "2 which were available to the public" "https://imgur.com/a/roOtkeS", Html.text "and ", Utils.link "1 that was intended for promotional use only" "https://i.imgur.com/FSCcxMK.jpg", Html.text "." ]
+                    , Html.li [] [ Html.text "1 mug (I've only seen ", Utils.link "one of these" "https://imgur.com/a/NFKxDEO", Html.text "sold and it was last week for 24,300 yen)" ]
+                    , Html.li [] [ Html.text "1 ", Utils.link "dakimakura" "https://imgur.com/a/wMrTB07", Html.text " (this is extremely rare, be prepared to pay through the nose if you find one for sale)" ]
                     ]
                 ]
-            , H.li []
-                [ H.text "And lastly these are "
-                , Hlp.link "the super rare items that I have never seen for sale" "https://imgur.com/a/xpXfRAU"
-                , H.text ":"
-                , H.ul []
-                    [ H.li [] [ H.text "1 Alpha stamp" ]
-                    , H.li [] [ H.text "1 watch" ]
-                    , H.li [] [ H.text "1 jacket" ]
-                    , H.li [] [ H.text "1 backpack" ]
-                    , H.li [] [ H.text "2 t-shirts" ]
+            , Html.li []
+                [ Html.text "And lastly these are "
+                , Utils.link "the super rare items that I have never seen for sale" "https://imgur.com/a/xpXfRAU"
+                , Html.text ":"
+                , Html.ul []
+                    [ Html.li [] [ Html.text "1 Alpha stamp" ]
+                    , Html.li [] [ Html.text "1 watch" ]
+                    , Html.li [] [ Html.text "1 jacket" ]
+                    , Html.li [] [ Html.text "1 backpack" ]
+                    , Html.li [] [ Html.text "2 t-shirts" ]
                     ]
                 ]
             ]
