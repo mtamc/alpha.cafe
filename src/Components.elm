@@ -9,7 +9,7 @@ module Components exposing
     , pageSection
     )
 
-import Html exposing (Html)
+import Html exposing (Html, div, h1, p, span, text)
 import Html.Attributes as HA
 import Utils
 
@@ -30,8 +30,8 @@ type alias ArticleSection msg =
 
 loadingAnim : Html msg
 loadingAnim =
-    Html.div [ HA.class "loading_ring" ]
-        [ Html.div [] [], Html.div [] [], Html.div [] [], Html.div [] [] ]
+    div [ HA.class "loading_ring" ]
+        [ div [] [], div [] [], div [] [], div [] [] ]
 
 
 blockquote : String -> String -> Html msg
@@ -54,7 +54,7 @@ pageHeader =
 pageMain : String -> List (Html msg) -> Html msg
 pageMain mainTitle children =
     Html.main_ []
-        (Html.h1 [] [ Html.text mainTitle ]
+        (h1 [] [ text mainTitle ]
             :: children
         )
 
@@ -70,9 +70,9 @@ pageSection data =
 pageFooter : Html msg
 pageFooter =
     Html.footer []
-        [ Html.p []
+        [ p []
             [ Html.a [ HA.href "#top", HA.target "_self" ]
-                [ Html.text "Jump to top" ]
+                [ text "Jump to top" ]
             ]
         ]
 
@@ -85,9 +85,9 @@ musicButton : Html msg
 musicButton =
     let
         btn =
-            Html.span [ HA.class "song_title" ]
-                [ Html.div [ HA.id "header_play_button" ] []
-                , Html.text "BGM"
+            span [ HA.class "song_title" ]
+                [ div [ HA.id "header_play_button" ] []
+                , text "BGM"
                 ]
 
         audioTag =
@@ -97,10 +97,10 @@ musicButton =
                 , HA.preload "none"
                 ]
                 [ Html.source [ HA.src "./ykk_ost.mp3" ] []
-                , Html.text "Your browser doesn't support audio element."
+                , text "Your browser doesn't support audio element."
                 ]
     in
-    Html.div [ HA.id "music_player" ]
+    div [ HA.id "music_player" ]
         [ btn
         , audioTag
         ]
@@ -122,4 +122,4 @@ heading title htmlId =
         , HA.class "heading"
         , HA.target "_self" -- prevents Elm from hijacking URL anchor
         ]
-        [ Html.h2 [ HA.id htmlId ] [ Html.text title ] ]
+        [ Html.h2 [ HA.id htmlId ] [ text title ] ]
