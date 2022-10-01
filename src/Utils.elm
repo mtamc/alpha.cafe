@@ -1,6 +1,5 @@
 module Utils exposing
-    ( callWithArg
-    , lazyImg
+    ( lazyImg
     , liLink
     , lineBreak
     , link
@@ -63,11 +62,6 @@ parseUrl url =
     url
         |> Url.Parser.parse Url.Parser.string
         |> Maybe.withDefault ""
-
-
-callWithArg : a -> (a -> b) -> b
-callWithArg arg fn =
-    fn arg
 
 
 

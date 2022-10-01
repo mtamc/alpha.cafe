@@ -122,7 +122,4 @@ heading title htmlId =
         , HA.class "heading"
         , HA.target "_self" -- prevents Elm from hijacking URL anchor
         ]
-        [ Html.h2
-            [ HA.id htmlId ]
-            [ Html.text title ]
-        ]
+        [ Html.h2 [ HA.id htmlId ] [ Html.text title ] ]

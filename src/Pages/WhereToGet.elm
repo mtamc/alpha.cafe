@@ -40,6 +40,7 @@ whereToReadAndWatch =
             , Utils.liLink "Indonesian (Yokohama Shopping Blog)" "https://shopee.co.id/Komik-M-C-Yokohama-Shopping-Blog-(Hitoshi-Ashinano)-1-14-(End)-i.18501247.2214024072"
             , Utils.liLink "Traditional Chinese (橫濱購物紀行)" "https://www.tongli.com.tw/BooksDetail.aspx?BD=KC31610"
             , Utils.liLink "French (Escale à Yokohama)" "https://www.meian-editions.fr/meian/produit/escale-a-yokohama-tome-1-livre-manga/3153"
+            , Utils.liLink "Russian (Поездка За Покупками В Иокогаму)" "https://alt-graph.ru"
             ]
         ]
     }

@@ -9,7 +9,7 @@ module ImageViewer exposing
     )
 
 import Components
-import Html exposing (Html, div)
+import Html exposing (Html, div, text)
 import Html.Attributes as HA
 import Html.Events as HE
 import Html.Extra as Html
@@ -62,18 +62,12 @@ videoThumb model folder name classes =
     in
     togglableFigure model name classes <|
         [ div [ HA.class "thumbnail" ]
-            [ thumbVid
-                (file "_thumb.mp4")
-                (file "_thumb.webm")
+            [ thumbVid (file "_thumb.mp4") (file "_thumb.webm")
             , Components.loadingAnim
             ]
         , Html.viewIf (model == DisplayingMedia name) <|
             div [ HA.class "fullsize visible" ]
-                [ fullVid
-                    (file ".mp4")
-                    (file ".webm")
-                    (Just (file ".jpg"))
-                ]
+                [ fullVid (file ".mp4") (file ".webm") (Just (file ".jpg")) ]
         ]
 
 
@@ -85,18 +79,12 @@ videoThumbOnlyOneSize model folder name classes =
     in
     togglableFigure model name classes <|
         [ div [ HA.class "thumbnail" ]
-            [ thumbVid
-                (file ".mp4")
-                (file ".webm")
+            [ thumbVid (file ".mp4") (file ".webm")
             , Components.loadingAnim
             ]
         , Html.viewIf (model == DisplayingMedia name) <|
             div [ HA.class "fullsize visible" ]
-                [ fullVid
-                    (file ".mp4")
-                    (file ".webm")
-                    Nothing
-                ]
+                [ fullVid (file ".mp4") (file ".webm") Nothing ]
         ]
 
 
@@ -149,7 +137,7 @@ thumbVid srcMp4 srcWebm =
         ]
         [ Html.source [ HA.src srcMp4, HA.type_ "video/mp4" ] []
         , Html.source [ HA.src srcWebm, HA.type_ "video/webm" ] []
-        , Html.text "Your browser does not support the video tag."
+        , text "Your browser does not support the video tag."
         ]
 
 
@@ -162,5 +150,5 @@ fullVid srcMp4 srcWebm vidPoster =
         ]
         [ Html.source [ HA.src srcMp4, HA.type_ "video/mp4" ] []
         , Html.source [ HA.src srcWebm, HA.type_ "video/webm" ] []
-        , Html.text "Your browser does not support the video tag."
+        , text "Your browser does not support the video tag."
         ]
