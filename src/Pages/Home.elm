@@ -6,25 +6,25 @@ import ImageViewer
 import Utils exposing (md)
 
 
-page : Components.PageData ImageViewer.Status ImageViewer.Msg
-page =
+page : ImageViewer.Model -> Components.PageData ImageViewer.Msg
+page viewerStatus =
     { windowTitle = "Alpha Café, everything about YKK!"
     , h1Text = "Everything about Yokohama Kaidashi Kikou!"
-    , view = view
+    , view = view viewerStatus
     }
 
 
-view : ImageViewer.Status -> List (Html ImageViewer.Msg)
+view : ImageViewer.Model -> List (Html ImageViewer.Msg)
 view viewerStatus =
-    [ whatIsThisSite
-    , whatIsYkk
-    , whatIsYkkAbout
-    , whyReadYkk
-    ]
-        |> List.map (Utils.callWithArg viewerStatus >> Components.pageSection)
+    List.map Components.pageSection
+        [ whatIsThisSite viewerStatus
+        , whatIsYkk viewerStatus
+        , whatIsYkkAbout viewerStatus
+        , whyReadYkk viewerStatus
+        ]
 
 
-whatIsThisSite : ImageViewer.Status -> Components.ArticleSection ImageViewer.Msg
+whatIsThisSite : ImageViewer.Model -> Components.ArticleSection ImageViewer.Msg
 whatIsThisSite viewerStatus =
     { title = "What's this site?"
     , htmlId = "what_is_this_site"
@@ -36,7 +36,7 @@ whatIsThisSite viewerStatus =
     }
 
 
-whatIsYkk : ImageViewer.Status -> Components.ArticleSection ImageViewer.Msg
+whatIsYkk : ImageViewer.Model -> Components.ArticleSection ImageViewer.Msg
 whatIsYkk viewerStatus =
     { title = "What's Yokohama Kaidashi Kikou?"
     , htmlId = "what_is_ykk"
@@ -51,7 +51,7 @@ whatIsYkk viewerStatus =
     }
 
 
-whatIsYkkAbout : ImageViewer.Status -> Components.ArticleSection ImageViewer.Msg
+whatIsYkkAbout : ImageViewer.Model -> Components.ArticleSection ImageViewer.Msg
 whatIsYkkAbout viewerStatus =
     { title = "What's YKK about?"
     , htmlId = "what_is_ykk_about"
@@ -65,7 +65,7 @@ whatIsYkkAbout viewerStatus =
     }
 
 
-whyReadYkk : ImageViewer.Status -> Components.ArticleSection ImageViewer.Msg
+whyReadYkk : ImageViewer.Model -> Components.ArticleSection ImageViewer.Msg
 whyReadYkk viewerStatus =
     { title = "Why should I read/watch YKK?"
     , htmlId = "why_read_ykk"

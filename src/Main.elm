@@ -36,7 +36,7 @@ type alias Model =
     { title : String
     , key : Nav.Key
     , route : String
-    , imageViewer : ImageViewer.Status
+    , imageViewer : ImageViewer.Model
     }
 
 
@@ -91,30 +91,29 @@ update msg model =
 -- VIEW
 
 
-routeToPage : String -> Components.PageData ImageViewer.Status ImageViewer.Msg
-routeToPage route =
+routeToPage : String -> ImageViewer.Model -> Components.PageData ImageViewer.Msg
+routeToPage route viewerStatus =
     case route of
         "where_to_get" ->
-            Pages.WhereToGet.page
+            Pages.WhereToGet.page viewerStatus
 
         "links" ->
             Pages.Links.page
 
         _ ->
-            Pages.Home.page
+            Pages.Home.page viewerStatus
 
 
 view : Model -> Document Msg
 view model =
     let
         page =
-            routeToPage model.route
+            routeToPage model.route model.imageViewer
     in
     { title = page.windowTitle
     , body =
         [ Components.pageHeader
-        , Components.pageMain page.h1Text (page.view model.imageViewer)
-            |> Html.map ImageViewerMsg
+        , Components.pageMain page.h1Text page.view |> Html.map ImageViewerMsg
         , Components.pageFooter
         ]
     }

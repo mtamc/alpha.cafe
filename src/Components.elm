@@ -14,10 +14,10 @@ import Html.Attributes as HA
 import Utils
 
 
-type alias PageData viewParam msg =
+type alias PageData msg =
     { windowTitle : String
     , h1Text : String
-    , view : viewParam -> List (Html msg)
+    , view : List (Html msg)
     }
 
 

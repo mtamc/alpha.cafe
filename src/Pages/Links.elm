@@ -5,11 +5,11 @@ import Html exposing (Html)
 import Utils
 
 
-page : Components.PageData noviewparam msg
+page : Components.PageData msg
 page =
     { windowTitle = "YKK-related links"
     , h1Text = "Yokohama Kaidashi Kikou links and communities"
-    , view = always view
+    , view = view
     }
 
 

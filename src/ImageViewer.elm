@@ -1,6 +1,6 @@
 module ImageViewer exposing
-    ( Msg
-    , Status
+    ( Model
+    , Msg
     , imgThumb
     , init
     , update
@@ -9,7 +9,7 @@ module ImageViewer exposing
     )
 
 import Components
-import Html exposing (Html)
+import Html exposing (Html, div)
 import Html.Attributes as HA
 import Html.Events as HE
 import Html.Extra as Html
@@ -21,12 +21,12 @@ import Utils
 -- MODEL
 
 
-type Status
+type Model
     = NotDisplayingMedia
     | DisplayingMedia String
 
 
-init : Status
+init : Model
 init =
     NotDisplayingMedia
 
@@ -36,17 +36,17 @@ init =
 
 
 type Msg
-    = MediaCleared
-    | MediaOpened String
+    = MediaClosingRequested
+    | MediaOpeningRequested String
 
 
-update : Msg -> Status
+update : Msg -> Model
 update msg =
     case msg of
-        MediaCleared ->
+        MediaClosingRequested ->
             NotDisplayingMedia
 
-        MediaOpened name ->
+        MediaOpeningRequested name ->
             DisplayingMedia name
 
 
@@ -54,21 +54,21 @@ update msg =
 -- VIEW
 
 
-videoThumb : Status -> String -> String -> String -> Html Msg
+videoThumb : Model -> String -> String -> String -> Html Msg
 videoThumb model folder name classes =
     let
         file ext =
             path folder name ext
     in
     togglableFigure model name classes <|
-        [ Html.div [ HA.class "thumbnail" ]
+        [ div [ HA.class "thumbnail" ]
             [ thumbVid
                 (file "_thumb.mp4")
                 (file "_thumb.webm")
             , Components.loadingAnim
             ]
         , Html.viewIf (model == DisplayingMedia name) <|
-            Html.div [ HA.class "fullsize visible" ]
+            div [ HA.class "fullsize visible" ]
                 [ fullVid
                     (file ".mp4")
                     (file ".webm")
@@ -77,21 +77,21 @@ videoThumb model folder name classes =
         ]
 
 
-videoThumbOnlyOneSize : Status -> String -> String -> String -> Html Msg
+videoThumbOnlyOneSize : Model -> String -> String -> String -> Html Msg
 videoThumbOnlyOneSize model folder name classes =
     let
         file ext =
             path folder name ext
     in
     togglableFigure model name classes <|
-        [ Html.div [ HA.class "thumbnail" ]
+        [ div [ HA.class "thumbnail" ]
             [ thumbVid
                 (file ".mp4")
                 (file ".webm")
             , Components.loadingAnim
             ]
         , Html.viewIf (model == DisplayingMedia name) <|
-            Html.div [ HA.class "fullsize visible" ]
+            div [ HA.class "fullsize visible" ]
                 [ fullVid
                     (file ".mp4")
                     (file ".webm")
@@ -100,15 +100,15 @@ videoThumbOnlyOneSize model folder name classes =
         ]
 
 
-imgThumb : Status -> String -> String -> String -> String -> String -> Html Msg
+imgThumb : Model -> String -> String -> String -> String -> String -> Html Msg
 imgThumb model folder name ext altName classes =
     togglableFigure model name classes <|
-        [ Html.div [ HA.class "thumbnail" ]
+        [ div [ HA.class "thumbnail" ]
             [ Utils.lazyImg (path folder name ("_thumb." ++ ext)) altName
             , Components.loadingAnim
             ]
         , Html.viewIf (model == DisplayingMedia name) <|
-            Html.div [ HA.class "fullsize visible" ]
+            div [ HA.class "fullsize visible" ]
                 [ Utils.lazyImg (path folder name ("." ++ ext)) altName ]
         ]
 
@@ -117,19 +117,19 @@ imgThumb model folder name ext altName classes =
 -- PRIVATE
 
 
-togglableFigure : Status -> String -> String -> List (Html Msg) -> Html Msg
+togglableFigure : Model -> String -> String -> List (Html Msg) -> Html Msg
 togglableFigure model name classes children =
     let
-        clickAction =
+        clickMsg =
             if model == DisplayingMedia name then
-                MediaCleared
+                MediaClosingRequested
 
             else
-                MediaOpened name
+                MediaOpeningRequested name
     in
     Html.figure
         [ HA.class ("thumb_enlarger " ++ classes)
-        , HE.onClick clickAction
+        , HE.onClick clickMsg
         ]
         children
 
