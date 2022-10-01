@@ -1,6 +1,6 @@
 # https://alpha.cafe
 
-![Latest screenshot.](./img/screenshot.png)
+![Latest screenshot.](./screenshot.png)
 
 Old school fansite for the manga **Yokohama Kaidashi Kikou**. 
 
