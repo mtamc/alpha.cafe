@@ -1,33 +1,28 @@
 module Pages.Links exposing (page)
 
-import Components
 import Html exposing (Html, li, strong, text, ul)
+import Page exposing (Page)
 import Utils
 
 
-page : Components.PageData msg
+page : Page msg
 page =
     { windowTitle = "YKK-related links"
     , h1Text = "Yokohama Kaidashi Kikou links and communities"
-    , view = view
+    , content =
+        [ Html.section []
+            [ activeCommunities
+            , otherFansites
+            , artAndFanContent
+            , databases
+            , inactiveCommunities
+            ]
+        ]
     }
 
 
-{-| TODO: Because the CSS was written when the site was just HTML+CSS,
-this cannot yet use Markdown.
-Long term, this should, however migrating will take a lot of time.
-If you want to see a page with Markdown, check out Home.elm
--}
-view : List (Html msg)
-view =
-    [ Html.section []
-        [ activeCommunities
-        , otherFansites
-        , artAndFanContent
-        , databases
-        , inactiveCommunities
-        ]
-    ]
+
+-- PRIVATE
 
 
 listSection : String -> List (Html msg) -> Html msg

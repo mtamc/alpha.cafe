@@ -3,35 +3,29 @@ module Pages.WhereToGet exposing (page)
 import Components
 import Html exposing (Html, li, text, ul)
 import ImageViewer
+import Page exposing (Page)
 import Utils exposing (md)
 
 
-page : ImageViewer.Model -> Components.PageData ImageViewer.Msg
-page viewerStatus =
+page : ImageViewer.Model -> Page ImageViewer.Msg
+page viewer =
     { windowTitle = "Where to read Yokohama Kaidashi Kikou?"
     , h1Text = "Finding Yokohama Kaidashi Kikou and its merchandise"
-    , view = view viewerStatus
+    , content =
+        [ whereToReadAndWatch
+        , whereToBuyMerch viewer
+        , merchList
+        ]
     }
 
 
-{-| TODO: Because the CSS was written when the site was just HTML+CSS,
-this cannot fully use Markdown.
-Long term, this should; however, migrating will take a lot of time.
--}
-view : ImageViewer.Model -> List (Html ImageViewer.Msg)
-view viewerStatus =
-    List.map Components.pageSection
-        [ whereToReadAndWatch
-        , whereToBuyMerch viewerStatus
-        , merchList
-        ]
+
+-- PRIVATE
 
 
-whereToReadAndWatch : Components.ArticleSection msg
+whereToReadAndWatch : Html msg
 whereToReadAndWatch =
-    { title = "Where to read and watch YKK?"
-    , htmlId = "read_and_watch"
-    , content =
+    Components.section "Where to read and watch YKK?" { id = "read_and_watch" } <|
         [ md "[Seven Seas has announced](https://sevenseasentertainment.com/2022/02/16/seven-seas-licenses-yokohama-kaidashi-kikou-manga-omnibus-series/) on February 16, 2022 that they have acquired the license to YKK and will publish oversized omnibus editions! Read on to [the next section](#buy_merch) if you are interested in buying untranslated media!"
         , md "For the anime, both OVAs are [conveniently viewable on YouTube](https://www.youtube.com/watch?v=C2HCVOH6DtA) at the moment. Higher-quality downloads can be found around the web -- feel free to ask on [Discord](/links) for guidance."
         , md "Non-English official translations exist in:"
@@ -43,15 +37,18 @@ whereToReadAndWatch =
             , Utils.liLink "Russian (Поездка За Покупками В Иокогаму)" "https://alt-graph.ru"
             ]
         ]
-    }
 
 
-whereToBuyMerch : ImageViewer.Model -> Components.ArticleSection ImageViewer.Msg
-whereToBuyMerch viewerStatus =
-    { title = "Where to buy YKK merchandise?"
-    , htmlId = "buy_merch"
-    , content =
-        [ ImageViewer.imgThumb viewerStatus "merch" "dangeresque_shelf" "jpg" "Danger's collection" "large right"
+whereToBuyMerch : ImageViewer.Model -> Html ImageViewer.Msg
+whereToBuyMerch viewer =
+    Components.section "Where to buy YKK merchandise?" { id = "buy_merch" } <|
+        [ ImageViewer.imgThumb viewer
+            { folder = "merch"
+            , name = "dangeresque_shelf"
+            , ext = "jpg"
+            , altName = "Danger's collection"
+            , classes = "large right"
+            }
         , md "*This section summarizes [DangeresqueIII's reddit guide](https://www.reddit.com/r/YKK/comments/jfu1g6/a_list_of_ykk_merch_and_where_to_buy_it/) with his permission.*"
         , md "As you will be buying from Japanese websites, remember to search for the Japanese title ヨコハマ買い出し紀行."
         , md "Here are Danger's favourite sites to buy YKK merch."
@@ -76,14 +73,11 @@ whereToBuyMerch viewerStatus =
             , li [] [ text "As an example, shipping to California takes about a week." ]
             ]
         ]
-    }
 
 
-merchList : Components.ArticleSection msg
+merchList : Html msg
 merchList =
-    { title = "List of YKK merchandise"
-    , htmlId = "merch_list"
-    , content =
+    Components.section "List of YKK merchandise" { id = "merch_list" } <|
         [ md "*This section summarizes [DangeresqueIII's reddit guide](https://www.reddit.com/r/YKK/comments/jfu1g6/a_list_of_ykk_merch_and_where_to_buy_it/) with his permission. Click on the links for pictures.*"
         , ul []
             [ li []
@@ -170,4 +164,3 @@ merchList =
                 ]
             ]
         ]
-    }

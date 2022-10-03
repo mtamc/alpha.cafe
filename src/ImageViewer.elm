@@ -54,8 +54,22 @@ update msg =
 -- VIEW
 
 
-videoThumb : Model -> String -> String -> String -> Html Msg
-videoThumb model folder name classes =
+{-| This function assumes the provided folder has:
+
+  - a `.jpg` fullsize still
+  - a `_thumb.mp4` small version
+  - a `_thumb.webm` small version
+  - a `.mp4` full video
+  - a `.webm` full video
+
+This weird setup originates from when this site was just HTML & CSS.
+I forgot why I originally provided both an mp4 and webm fallback exactly;
+something to do with a codec with lighter filesizes only working
+on certain browsers.
+
+-}
+videoThumb : Model -> { folder : String, name : String, classes : String } -> Html Msg
+videoThumb model { folder, name, classes } =
     let
         file ext =
             path folder name ext
@@ -71,8 +85,19 @@ videoThumb model folder name classes =
         ]
 
 
-videoThumbOnlyOneSize : Model -> String -> String -> String -> Html Msg
-videoThumbOnlyOneSize model folder name classes =
+{-| This function assumes the provided folder has:
+
+  - a `.mp4` full video
+  - a `.webm` full video
+
+This weird setup originates from when this site was just HTML & CSS.
+I forgot why I originally provided both an mp4 and webm fallback exactly;
+something to do with a codec with lighter filesizes only working
+on certain browsers.
+
+-}
+videoThumbOnlyOneSize : Model -> { folder : String, name : String, classes : String } -> Html Msg
+videoThumbOnlyOneSize model { folder, name, classes } =
     let
         file ext =
             path folder name ext
@@ -88,8 +113,25 @@ videoThumbOnlyOneSize model folder name classes =
         ]
 
 
-imgThumb : Model -> String -> String -> String -> String -> String -> Html Msg
-imgThumb model folder name ext altName classes =
+{-| This function assumes the provided folder has:
+
+  - a `.{ext}` full image
+  - a `_thumb.{ext}`
+
+This weird setup originates from when this site was just HTML & CSS.
+
+-}
+imgThumb :
+    Model
+    ->
+        { folder : String
+        , name : String
+        , ext : String
+        , altName : String
+        , classes : String
+        }
+    -> Html Msg
+imgThumb model { folder, name, ext, altName, classes } =
     togglableFigure model name classes <|
         [ div [ HA.class "thumbnail" ]
             [ Utils.lazyImg (path folder name ("_thumb." ++ ext)) altName

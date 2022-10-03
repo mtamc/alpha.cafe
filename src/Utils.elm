@@ -8,7 +8,7 @@ module Utils exposing
     , parseUrl
     )
 
-import Html as H exposing (Html)
+import Html exposing (Html, br, li, p, text, ul)
 import Html.Attributes as HA
 import Markdown.Parser as MD
 import Markdown.Renderer as MDR
@@ -22,33 +22,33 @@ md markdownBody =
     markdownBody
         |> mdParser
         |> List.head
-        |> Maybe.withDefault (H.p [] [])
+        |> Maybe.withDefault (p [] [])
 
 
 nestedLi : List (Html msg) -> Html msg
 nestedLi content =
-    H.ul []
-        [ H.li [] content ]
+    ul []
+        [ li [] content ]
 
 
 link : String -> String -> Html msg
 link displayedText url =
-    H.a [ HA.href url ] [ H.text displayedText ]
+    Html.a [ HA.href url ] [ text displayedText ]
 
 
 liLink : String -> String -> Html msg
 liLink displayedText url =
-    H.li [] [ link displayedText url ]
+    li [] [ link displayedText url ]
 
 
 lineBreak : Html msg
 lineBreak =
-    H.br [] []
+    br [] []
 
 
 lazyImg : String -> String -> Html msg
 lazyImg source altName =
-    H.img
+    Html.img
         [ HA.src source
         , HA.alt altName
         , HA.attribute "importance" "low"
@@ -74,4 +74,4 @@ mdParser markdownBody =
         |> MD.parse
         |> Result.mapError (List.map MD.deadEndToString >> String.join "\n")
         |> Result.andThen (MDR.render MDR.defaultHtmlRenderer)
-        |> Result.extract (\errs -> [ H.text errs ])
+        |> Result.extract (\errs -> [ text errs ])

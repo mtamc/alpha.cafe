@@ -2,18 +2,13 @@ module Main exposing (main)
 
 import Browser exposing (Document)
 import Browser.Navigation as Nav
-import Components
-import Html
 import ImageViewer
+import Page exposing (Page)
 import Pages.Home
 import Pages.Links
 import Pages.WhereToGet
 import Url
 import Utils
-
-
-
--- MAIN
 
 
 main : Program () Model Msg
@@ -36,7 +31,7 @@ type alias Model =
     { title : String
     , key : Nav.Key
     , route : String
-    , imageViewer : ImageViewer.Model
+    , viewer : ImageViewer.Model
     }
 
 
@@ -45,7 +40,7 @@ init _ url key =
     ( { title = "Alpha Café"
       , key = key
       , route = Utils.parseUrl url
-      , imageViewer = ImageViewer.init
+      , viewer = ImageViewer.init
       }
     , Cmd.none
     )
@@ -58,7 +53,7 @@ init _ url key =
 type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
-    | ImageViewerMsg ImageViewer.Msg
+    | ImageViewerChanged ImageViewer.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -81,8 +76,8 @@ update msg model =
                     , Nav.load href
                     )
 
-        ImageViewerMsg viewerMsg ->
-            ( { model | imageViewer = ImageViewer.update viewerMsg }
+        ImageViewerChanged viewerMsg ->
+            ( { model | viewer = ImageViewer.update viewerMsg }
             , Cmd.none
             )
 
@@ -91,29 +86,24 @@ update msg model =
 -- VIEW
 
 
-routeToPage : String -> ImageViewer.Model -> Components.PageData ImageViewer.Msg
-routeToPage route viewerStatus =
-    case route of
-        "where_to_get" ->
-            Pages.WhereToGet.page viewerStatus
-
-        "links" ->
-            Pages.Links.page
-
-        _ ->
-            Pages.Home.page viewerStatus
-
-
 view : Model -> Document Msg
 view model =
-    let
-        page =
-            routeToPage model.route model.imageViewer
-    in
-    { title = page.windowTitle
-    , body =
-        [ Components.pageHeader
-        , Components.pageMain page.h1Text page.view |> Html.map ImageViewerMsg
-        , Components.pageFooter
-        ]
-    }
+    Page.toDocument
+        { menu =
+            [ { label = "Home", link = "/" }
+            , { label = "Where to get YKK (& merch)", link = "/where_to_get" }
+            , { label = "YKK communities & links", link = "/links" }
+            ]
+        , page =
+            case model.route of
+                "where_to_get" ->
+                    Pages.WhereToGet.page model.viewer
+                        |> Page.toParentMsg ImageViewerChanged
+
+                "links" ->
+                    Pages.Links.page
+
+                _ ->
+                    Pages.Home.page model.viewer
+                        |> Page.toParentMsg ImageViewerChanged
+        }
