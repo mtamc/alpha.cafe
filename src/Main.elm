@@ -7,8 +7,8 @@ import Page exposing (Page)
 import Pages.Home
 import Pages.Links
 import Pages.WhereToGet
-import Url
-import Utils
+import Url exposing (Url)
+import Url.Parser as UP
 
 
 main : Program () Model Msg
@@ -17,7 +17,7 @@ main =
         { init = init
         , update = update
         , view = view
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = always Sub.none
         , onUrlChange = UrlChanged
         , onUrlRequest = LinkClicked
         }
@@ -30,20 +30,35 @@ main =
 type alias Model =
     { title : String
     , key : Nav.Key
-    , route : String
+    , route : Maybe Route
     , viewer : ImageViewer.Model
     }
 
 
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     ( { title = "Alpha Café"
       , key = key
-      , route = Utils.parseUrl url
+      , route = UP.parse urlToRoute url
       , viewer = ImageViewer.init
       }
     , Cmd.none
     )
+
+
+type Route
+    = Home
+    | WhereToGet
+    | Links
+
+
+urlToRoute : UP.Parser (Route -> a) a
+urlToRoute =
+    UP.oneOf
+        [ UP.map Home UP.top
+        , UP.map WhereToGet <| UP.s "where_to_get"
+        , UP.map Links <| UP.s "links"
+        ]
 
 
 
@@ -52,7 +67,7 @@ init _ url key =
 
 type Msg
     = LinkClicked Browser.UrlRequest
-    | UrlChanged Url.Url
+    | UrlChanged Url
     | ImageViewerChanged ImageViewer.Msg
 
 
@@ -60,7 +75,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlChanged url ->
-            ( { model | route = Utils.parseUrl url }
+            ( { model | route = UP.parse urlToRoute url }
             , Cmd.none
             )
 
@@ -87,7 +102,7 @@ update msg model =
 
 
 view : Model -> Document Msg
-view model =
+view { route, viewer } =
     Page.toDocument
         { menu =
             [ { label = "Home", link = "/" }
@@ -95,15 +110,15 @@ view model =
             , { label = "YKK communities & links", link = "/links" }
             ]
         , page =
-            case model.route of
-                "where_to_get" ->
-                    Pages.WhereToGet.page model.viewer
+            case Maybe.withDefault Home route of
+                Home ->
+                    Pages.Home.page viewer
                         |> Page.toParentMsg ImageViewerChanged
 
-                "links" ->
+                WhereToGet ->
+                    Pages.WhereToGet.page viewer
+                        |> Page.toParentMsg ImageViewerChanged
+
+                Links ->
                     Pages.Links.page
-
-                _ ->
-                    Pages.Home.page model.viewer
-                        |> Page.toParentMsg ImageViewerChanged
         }

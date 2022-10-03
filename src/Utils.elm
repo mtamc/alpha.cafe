@@ -5,7 +5,6 @@ module Utils exposing
     , link
     , md
     , nestedLi
-    , parseUrl
     )
 
 import Html exposing (Html, br, li, p, text, ul)
@@ -13,8 +12,6 @@ import Html.Attributes as HA
 import Markdown.Parser as MD
 import Markdown.Renderer as MDR
 import Result.Extra as Result
-import Url exposing (Url)
-import Url.Parser
 
 
 md : String -> Html msg
@@ -55,13 +52,6 @@ lazyImg source altName =
         , HA.attribute "loading" "lazy"
         ]
         []
-
-
-parseUrl : Url -> String
-parseUrl url =
-    url
-        |> Url.Parser.parse Url.Parser.string
-        |> Maybe.withDefault ""
 
 
 
