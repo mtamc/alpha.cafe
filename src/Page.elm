@@ -1,4 +1,4 @@
-module Page exposing (MenuItem, Page, toDocument, toParentMsg)
+module Page exposing (Page, toDocument, toParentMsg)
 
 import Browser exposing (Document)
 import Html exposing (Html, div, h1, p, span, text)

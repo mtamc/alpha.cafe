@@ -35,6 +35,12 @@ type alias Model =
     }
 
 
+type Route
+    = Home
+    | WhereToGet
+    | Links
+
+
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     ( { title = "Alpha Café"
@@ -44,12 +50,6 @@ init _ url key =
       }
     , Cmd.none
     )
-
-
-type Route
-    = Home
-    | WhereToGet
-    | Links
 
 
 urlToRoute : UP.Parser (Route -> a) a
@@ -75,26 +75,18 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlChanged url ->
-            ( { model | route = UP.parse urlToRoute url }
-            , Cmd.none
-            )
+            ( { model | route = UP.parse urlToRoute url }, Cmd.none )
 
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
-                    ( model
-                    , Nav.pushUrl model.key (Url.toString url)
-                    )
+                    ( model, Nav.pushUrl model.key (Url.toString url) )
 
                 Browser.External href ->
-                    ( model
-                    , Nav.load href
-                    )
+                    ( model, Nav.load href )
 
         ImageViewerChanged viewerMsg ->
-            ( { model | viewer = ImageViewer.update viewerMsg }
-            , Cmd.none
-            )
+            ( { model | viewer = ImageViewer.update viewerMsg }, Cmd.none )
 
 
 
